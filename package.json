@@ -2,7 +2,7 @@
   "name": "sequenceapp",
   "version": "0.0.0",
   "scripts": {
-    "start": "vite",
+     "start": "vite --port $PORT",
     "build": "vite build",
     "preview": "vite preview"
   },
