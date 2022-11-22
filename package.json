@@ -2,17 +2,17 @@
   "name": "sequenceapp",
   "version": "0.0.0",
   "scripts": {
-    "start": "vite NPM_CONFIG_PRODUCTION=false",
+    "start": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "vue": "^3.2.41",
-    "vue-router": "^4.1.5"
+    "vue-router": "^4.1.5",
+    "vite": "^3.1.8"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.1.2",
-    "@vitejs/plugin-vue-jsx": "^2.0.1",
-    "vite": "^3.1.8"
+    "@vitejs/plugin-vue-jsx": "^2.0.1"
   }
 }
