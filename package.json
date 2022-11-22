@@ -2,7 +2,7 @@
   "name": "sequenceapp",
   "version": "0.0.0",
   "scripts": {
-    "start": "vite",
+    "start": "vite NPM_CONFIG_PRODUCTION=false",
     "build": "vite build",
     "preview": "vite preview"
   },
