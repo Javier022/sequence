@@ -12,12 +12,16 @@ export default {
       randomPosition: 0,
       entryNumber: "",
       successPercentage: 0,
+      attempt: 0,
       count: 0,
+      incorretNumber: 0,
       reset: false,
+      timer: null,
     };
   },
   watch: {
-    count: (value) => {
+    attempt: (value) => {
+      console.log(value);
       if (value === 5) return;
     },
   },
@@ -26,10 +30,9 @@ export default {
       const sequenceGenerated = this.generateRandomNumbers();
       const firstIndexSequence = sequenceGenerated[0];
       const lastIndexSequence = sequenceGenerated[sequenceGenerated.length - 1];
-
       const getRandomPosition = this.randomNumber(firstIndexSequence, lastIndexSequence);
-      this.randomPosition = getRandomPosition;
 
+      this.randomPosition = getRandomPosition;
       this.sequence = sequenceGenerated;
     },
     generateRandomNumbers() {
@@ -39,35 +42,71 @@ export default {
       return sequence;
     },
     validateNumber() {
-      if (this.count === 5) {
-        this.count = 0;
-        this.successPercentage = 0;
-        return this.generateSequence();
-      }
-
       if (!this.entryNumber) {
         return;
       }
 
       if (this.entryNumber !== this.randomPosition) {
         this.entryNumber = "";
-        this.count++;
+        this.attempt++;
 
-        return this.generateSequence();
+        this.generateSequence();
+        return this.executeValidateNumber();
       }
 
       this.entryNumber = "";
-      this.count++;
+      this.attempt++;
       this.successPercentage = this.successPercentage + 20;
 
       this.generateSequence();
+      this.executeValidateNumber();
     },
     randomNumber(min, max) {
       return Math.floor(Math.random() * (max - min) + min);
     },
+    executeValidateNumber() {
+      if (this.attempt === 5) return;
+
+      if (this.attempt === 0) {
+        return this.generateSequence();
+      }
+
+      if (this.entryNumber) {
+        if (!this.timer) return;
+
+        clearTimeout(this.timer);
+        return this.validateNumber();
+      }
+    },
+    clearAndExecuteValidateNumber() {
+      this.attempt = 0;
+      this.successPercentage = 0;
+      this.entryNumber = "";
+      this.attempt++;
+
+      this.executeValidateNumber();
+    },
   },
   mounted() {
-    this.generateSequence();
+    this.timer = setTimeout(() => {
+      this.entryNumber = this.randomPosition + 1;
+      console.log("se ejecuto mounted");
+      this.validateNumber();
+    }, 10000);
+    this.executeValidateNumber();
+  },
+  updated() {
+    console.log(this.attempt, "update executed");
+    if (this.attempt) {
+      this.timer = setTimeout(() => {
+        this.entryNumber = this.randomPosition + 1;
+        console.log("se ejecuto el update");
+        this.executeValidateNumber();
+        // this.validateNumber();
+      }, 10000);
+
+      this.count = 0;
+    }
   },
 };
 </script>
@@ -76,12 +115,13 @@ export default {
   <main class="container">
     <div>
       <p>Acierto: {{ successPercentage }}%</p>
-      <p>Intentos: {{ count }}</p>
+      <p>Intentos: {{ attempt }}</p>
+      <p>Timer: {{ count }}</p>
       <Card title="Completa la Secuencia">
         <template #default>
           <div class="card">
             <h3
-              v-show="count < 5"
+              v-show="attempt < 5"
               class="card__number"
               v-for="number in sequence"
               v-bind:key="number"
@@ -99,8 +139,9 @@ export default {
         </template>
 
         <template #footer>
-          <button @click="validateNumber">
-            {{ count === 5 ? "CONTINUAR" : "RESPONDER" }}
+          <button v-show="attempt < 5" @click="executeValidateNumber">RESPONDER</button>
+          <button v-show="attempt === 5" @click="clearAndExecuteValidateNumber">
+            CONTINUAR
           </button>
         </template>
       </Card>
