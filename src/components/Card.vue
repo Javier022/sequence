@@ -6,7 +6,9 @@ defineProps({
 
 <template>
   <div class="card">
-    <h1 class="card__title">{{ title }}</h1>
+    <div class="card__header">
+      <slot name="header"></slot>
+    </div>
     <div class="card__body">
       <slot></slot>
     </div>
@@ -20,7 +22,16 @@ defineProps({
 .card {
   display: flex;
   flex-direction: column;
-  border: 1px solid gray;
+  justify-content: center;
+  padding: 20px 50px;
+  width: 350px;
+  height: 260px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.card__header {
+  display: flex;
+  justify-content: center;
 }
 
 .card__footer {
