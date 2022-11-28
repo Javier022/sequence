@@ -37,9 +37,6 @@ export const SequenceMixin = {
       return sequence;
     },
     validateNumber() {
-      if (!this.entryNumber) {
-        return;
-      }
       if (this.entryNumber !== this.randomPosition) {
         this.entryNumber = "";
         this.attempt++;
@@ -55,9 +52,11 @@ export const SequenceMixin = {
 
     executeValidateNumber() {
       if (this.attempt === 5) return;
-      if (this.attempt === 0) {
-        return this.generateSequence();
+
+      if (!this.entryNumber) {
+        return;
       }
+
       if (this.entryNumber) {
         if (!this.timer) return;
         clearTimeout(this.timer);

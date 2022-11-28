@@ -16,13 +16,16 @@ export default {
     attempt: (value) => {
       if (value === 5) return;
     },
+    successPercentage: (value) => {
+      console.log(value);
+    },
   },
   mounted() {
     this.timer = setTimeout(() => {
       this.entryNumber = this.randomPosition + 1;
       this.validateNumber();
     }, 10000);
-    this.executeValidateNumber();
+    this.generateSequence();
   },
   updated() {
     if (this.attempt) {
